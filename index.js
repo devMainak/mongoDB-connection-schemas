@@ -1,52 +1,31 @@
-require('./db')
-const Car = require('./models/car')
+const { initializeDatabase } = require("./db/db.connect")
+const fs = require('fs')
+const Movie = require('./models/movies.models')
 
 
-// Define a named function to add data to the "Car" model:
-async function addCarData() {
-  const newCar = new Car({
-    make: 'Toyota',
-    model: 'Corolla',
-    year: 2022,
-  })
+initializeDatabase();
 
-  try {
-    const savedCar = await newCar.save()
-    console.log('Car data saved successfully:', savedCar)
-  }
-  catch (error) {
-    console.error('Error saving car data:', error)
-  }
+const newMovie = {
+  title: "New Movie",
+  releaseYear: 2023,
+  genre: ["Drama"],
+  director: "David Fincher",
+  actors: ["Actor1", "Actor2"],
+  language: "English",
+  country: "USA",
+  rating: 8.2,
+  plot: "A young programmer creates a simulation world and looses difference between reality and virtual world.",
+  awards: "Oscar Nomination",
+  posterUrl: "https://example.com/poster9.jpg",
+  trailerUrl: "https://example.com/trailer9.mp4"
 }
 
-addCarData()
-
-// Define a function to add another data entry:
-async function addAnotherCarData() {
-  const anotherCar = new Car({
-    make: 'Honda',
-    model: 'Civic',
-    year: 2023,
-  })
-
+async function createMovie(newMovie){
   try {
-    const savedAnotherCar = await anotherCar.save()
-    console.log('Another car data saved successfully:', savedAnotherCar)
-  } catch (error) {
-    console.error('Error saving another car data:', error)
+    const movie = new Movie(newMovie)
+    const saveMovie = await movie.save()
+    console.log("New Movie data:", saveMovie)
+  } catch(error) {
+    throw error
   }
 }
-
-addAnotherCarData()
-
-// Define a function to retrieve all car data from the database:
-async function findAllCars() {
-  try {
-    const allCars = await Car.find()
-    console.log('All cars in the database:', allCars)
-  } catch (error) {
-    console.error('Error fetching all cars:', error)
-  }
-}
-
-findAllCars()
