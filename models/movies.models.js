@@ -31,6 +31,7 @@ const movieSchema = new mongoose.Schema({
     max: 10,
     default: 0
   },
+  plot: String,
   awards: {
     type: String
   },
