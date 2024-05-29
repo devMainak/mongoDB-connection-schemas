@@ -67,4 +67,29 @@ async function readMovieByDirector(directorName){
   }
 }
 
-readMovieByDirector("David Fincher")
+// readMovieByDirector("David Fincher")
+
+// find a movie by id and update it's rating
+async function updateMovie(movieId, dataToUpdate)
+{
+  try {
+    const updatedMovie = await Movie.findByIdAndUpdate(movieId, dataToUpdate, {new: true})
+    console.log(updatedMovie)
+  } catch(error){
+    console.error("Error in updating Movie rating", error)
+  }
+}
+
+// updateMovie("66502d24f48516b96b43ec70", {releaseYear: 2002})
+
+// find one data and update its value
+async function updateMovieDetail(movieTitle, dataToUpdate){
+  try {
+    const updatedMovie = await Movie.findOneAndUpdate({title: movieTitle}, dataToUpdate, {new: true})
+    console.log(updatedMovie)
+  } catch(error){
+    console.error("Error in changing data:", error)
+  }
+}
+
+updateMovieDetail('Kabhi Khushi Kabhie Gham', {releaseYear: 2001})
