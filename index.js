@@ -129,16 +129,7 @@ app.get("/movies/genres/:movieGenre", async(req, res) => {
   }
 })
 
-// find a movie by id and update it's rating
-async function updateMovie(movieId, dataToUpdate)
-{
-  try {
-    const updatedMovie = await Movie.findByIdAndUpdate(movieId, dataToUpdate, {new: true})
-    console.log(updatedMovie)
-  } catch(error){
-    console.error("Error in updating Movie rating", error)
-  }
-}
+
 
 // updateMovie("66502d24f48516b96b43ec70", {releaseYear: 2002})
 
@@ -197,6 +188,30 @@ app.delete("/movies/:movieId", async (req, res) => {
   } catch(err) {
     res.status(500)
     .json({error: "Failed to delete movie"})
+  }
+})
+
+// find a movie by id and update it's rating
+async function updateMovie(movieId, dataToUpdate)
+{
+  try {
+    const updatedMovie = await Movie.findByIdAndUpdate(movieId, dataToUpdate, {new: true})
+    return updatedMovie
+  } catch(error){
+    console.error("Error in updating Movie rating", error)
+  }
+}
+
+app.post("/movies/:movieId", async (req, res) => {
+  try {
+    const updatedMovie = await updateMovie(req.params.movieId, res.body)
+    if (updatedMovie) {
+      res.status(201).json({message: "Movie updated successfully", updatedMovie: updatedMovie})
+    } else {
+      res.status(404).json({error: "Movie not found"})
+    }
+  } catch(error) {
+    res.status(500).json({error: "Failed to update movie."})
   }
 })
 
