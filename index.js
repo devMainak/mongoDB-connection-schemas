@@ -9,7 +9,31 @@ app.use(express.json())
 initializeDatabase();
 
 
+async function createMovie(newMovie){
+  try {
+    const movie = new Movie(newMovie)
+    const saveMovie = await movie.save()
+    return saveMovie
+  } catch(error) {
+    throw error
+  }
+}
 
+app.post("/movies", async (req, res) => {
+  try {
+    const saveMovie = await createMovie(req.body)
+    if (saveMovie)
+    {
+      res.status(201).json({message: "Movie added successfully.", movie: saveMovie})
+    } else {
+      res.status(404)
+      .json({error: "Failed to add movie"})
+    }
+  } catch(err) {
+    res.status(500)
+    .json({error: "Failed to add movie"})
+  }
+})
 
 // find a movie with a perticular title
 async function readMovieByTitle(movieTitle){
