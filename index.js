@@ -154,15 +154,7 @@ async function updateMovieDetail(movieTitle, dataToUpdate){
 
 // updateMovieDetail('Kabhi Khushi Kabhie Gham', {releaseYear: 2001})
  
-// find a movie by id and delete from the database
-async function deleteMovie(movieId){
-  try {
-    const deletedMovie = await Movie.findByIdAndDelete(movieId)
-    console.log(deletedMovie)
-  } catch(err){
-    throw err
-  }
-}
+
 
 // deleteMovie('6652d1af443f38bc0d266689')
 
@@ -180,6 +172,33 @@ async function deleteMovieFromDb(movieTitle)
 }
 
 // deleteMovieFromDb("3 Idiots")
+
+// find a movie by id and delete from the database
+async function deleteMovie(movieId){
+  try {
+    const deletedMovie = await Movie.findByIdAndDelete(movieId)
+    return deletedMovie
+  } catch(err){
+    throw err
+  }
+}
+
+app.delete("/movies/:movieId", async (req, res) => {
+  try {
+    const deletedMovie = await deleteMovie(req.params.movieId)
+    console.log(deletedMovie)
+    if (deletedMovie) {
+      res.status(201)
+      .json({message: "Movie deleted successfully"})
+    } else {
+      res.status(400)
+      .json({error: "Failed to delete movie"})
+    }
+  } catch(err) {
+    res.status(500)
+    .json({error: "Failed to delete movie"})
+  }
+})
 
 const PORT = 3000
 app.listen(PORT, (req, res) => {
